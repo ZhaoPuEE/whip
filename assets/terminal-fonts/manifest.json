@@ -10,13 +10,13 @@
     "bundledLicenseFile": "jetbrains-mono-OFL.txt"
   },
   "cjk": {
-    "displayName": "AR PL UKai HK",
+    "displayName": "Noto Sans Mono CJK SC",
     "cssFamily": "Herdr Terminal CJK",
-    "regularFile": "ArphicUKaiHK.ttf",
-    "bundledRegularFile": "arphic-ukai-hk.ttf",
-    "format": "truetype",
-    "licenseFile": "ARPHICPL.txt",
-    "bundledLicenseFile": "arphic-ukai-LICENSE.txt"
+    "regularFile": "NotoSansMonoCJKsc-Regular.otf",
+    "bundledRegularFile": "noto-sans-mono-cjk-sc.otf",
+    "format": "opentype",
+    "licenseFile": "NotoSansCJK-OFL.txt",
+    "bundledLicenseFile": "noto-sans-cjk-OFL.txt"
   },
   "symbols": {
     "displayName": "Symbols Nerd Font Mono",

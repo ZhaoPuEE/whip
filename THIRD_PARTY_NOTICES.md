@@ -77,9 +77,9 @@ SOFTWARE.
 - [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), copyright 2020
   The JetBrains Mono Project Authors, is distributed under the [SIL Open Font
   License 1.1](assets/licenses/jetbrains-mono-OFL-1.1.txt).
-- [AR PL UKai HK](https://www.freedesktop.org/wiki/Software/CJKUnifonts/),
-  copyright (C) 1999 Arphic Technology Co., Ltd., is distributed under the
-  [Arphic Public License](assets/licenses/arphic-public-license.txt).
+- [Noto Sans Mono CJK SC](https://github.com/notofonts/noto-cjk), copyright
+  2014–2021 Adobe, is distributed under the [SIL Open Font License
+  1.1](assets/licenses/noto-sans-cjk-OFL-1.1.txt).
 - [Symbols Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts),
   copyright (c) 2014 Ryan L McIntyre, is distributed under the [MIT
   License](assets/licenses/nerd-fonts-MIT.txt).

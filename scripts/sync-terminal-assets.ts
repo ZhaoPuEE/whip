@@ -125,7 +125,7 @@ if (!checkOnly) {
   await mkdir(iosAssets, { recursive: true });
 }
 // Remove assets replaced by the shared font and Pele renderer.
-await Promise.all([assets, iosAssets].flatMap(directory => ['arphic-ukai-hk.woff2', 'mermaid.min.js', 'mermaid-LICENSE.txt'].map(async name => {
+await Promise.all([assets, iosAssets].flatMap(directory => ['arphic-ukai-hk.woff2', 'arphic-ukai-hk.ttf', 'arphic-ukai-LICENSE.txt', 'mermaid.min.js', 'mermaid-LICENSE.txt'].map(async name => {
   const retired = resolve(directory, name);
   if (!checkOnly) {
     await rm(retired, { force: true });
@@ -335,6 +335,7 @@ const terminalSessionHtml = `<!doctype html>
       font-style: normal;
       font-weight: 400;
       font-display: block;
+      unicode-range: ${cjkUnicodeRange};
     }
     html, body, #terminal-geometry, #terminal { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
     html { -webkit-text-size-adjust: none; text-size-adjust: none; }

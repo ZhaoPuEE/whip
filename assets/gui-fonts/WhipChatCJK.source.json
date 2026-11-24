@@ -1,13 +1,10 @@
 {
-  "fontPath": "assets/terminal-fonts/ArphicUKaiHK.ttf",
-  "fontSha256": "63502e1913dd98fc82a7c6e0f766851b27a3aa35ffbd35c57e6ed010683367a9",
-  "restoredFromCommit": "7cdf93305dd7bc611fa501bca2f7ea2edd74ab6a",
-  "archiveUrl": "https://deb.debian.org/debian/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_0.2.20080216.2.orig.tar.bz2",
-  "archiveSha256": "b4968d73519f4f8747e85548fb85d21b665da1bf1ba900a7c499976e6a8ae3d2",
-  "collectionMember": "fonts-arphic-ukai-0.2.20080216.2/ukai.ttc",
-  "postScriptName": "UKaiHK",
-  "familyName": "AR PL UKai HK",
-  "version": "Version 0.2.20080216.1 ",
-  "glyphMappings": 26444,
-  "cjkCharacters": 22145
+  "fontPath": "assets/terminal-fonts/NotoSansMonoCJKsc-Regular.otf",
+  "fontSha256": "ec04cc376b34887cedbdf84074e2e226ed2761eeabdcb9173fc1dd7bfd153ef7",
+  "sourceUrl": "https://raw.githubusercontent.com/notofonts/noto-cjk/Sans2.004/Sans/Mono/NotoSansMonoCJKsc-Regular.otf",
+  "postScriptName": "NotoSansMonoCJKsc-Regular",
+  "familyName": "Noto Sans Mono CJK SC",
+  "version": "Version 2.004;hotconv 1.0.118;makeotfexe 2.5.65603",
+  "glyphMappings": 44810,
+  "cjkCharacters": 31383
 }

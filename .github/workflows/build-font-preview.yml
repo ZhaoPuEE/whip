@@ -1,0 +1,51 @@
+name: Build Android font preview
+
+on:
+  push:
+    branches: [moshi-fonts]
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      CARGO_INCREMENTAL: '0'
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      NODE_ENV: production
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: ./.github/actions/setup-android-nix
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Install Android SDK packages
+        run: >-
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          "platforms;android-37.0" "build-tools;37.0.0"
+          "ndk;27.1.12297006" "cmake;3.22.1"
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c
+      - run: npm ci --include=dev
+      - run: node scripts/sync-terminal-assets.ts --check
+      - run: npm test -- --runInBand chatCjkFont cjkText guiFonts appFontSize terminalAssetGeneration searchText remoteGitDiffPreview
+      - name: Build ARM64 preview APK
+        run: >-
+          nix develop .#default -c android/gradlew -p android app:assembleRelease
+          --init-script "$GITHUB_WORKSPACE/.github/gradle/android-ci.gradle"
+          -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
+          -PreactNativeArchitectures=arm64-v8a
+          -Pwhip.fontPreview=true -Pwhip.previewSigning=true -Pwhip.skipR8=true
+          --max-workers=2 --no-parallel --no-daemon
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: whip-font-preview-arm64
+          path: android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          compression-level: 0

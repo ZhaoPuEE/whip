@@ -61,13 +61,13 @@ test('asChild leaves the supplied element intact', () => {
   expect(tree.root.findByType(Slot).props.children).toBe(child);
 });
 
-test('plain-text previews apply UKai without dropping trailing blank lines', () => {
+test('plain-text previews apply Noto CJK without dropping trailing blank lines', () => {
   act(() => { tree = create(<RemoteTextPreview content={content} progressIdentity={progressIdentity} />); });
   expect(cjkText()).toBe('中文\u{e0100}日本語');
   expect(renderedText(tree.toJSON())).toContain(content);
 });
 
-test('ANSI output retains colors and emphasis around UKai spans', () => {
+test('ANSI output retains colors and emphasis around Noto CJK spans', () => {
   act(() => { tree = create(<AnsiOutput value={'prompt 😀 \u001b[31;1m中文\u001b[0m 日本語한국어'} />); });
   expect(renderedText(tree.toJSON())).toBe('prompt 😀 中文 日本語한국어');
   expect(cjkText()).toBe('中文日本語');

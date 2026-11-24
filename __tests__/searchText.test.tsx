@@ -31,7 +31,7 @@ test('a query crossing syntax tokens highlights both portions without altering t
   act(() => renderer.unmount());
 });
 
-test('keeps UKai on Chinese text and variation selectors while highlighting a mixed-script match', () => {
+test('keeps Noto CJK on Chinese text and variation selectors while highlighting a mixed-script match', () => {
   let renderer: ReactTestRenderer;
   const content = 'Code 中文\u{e0100} 😀';
   act(() => { renderer = create(<ChatSearchQuery.Provider value="Code 中"><SearchText text={content} /></ChatSearchQuery.Provider>); });

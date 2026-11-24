@@ -400,7 +400,7 @@ it('paints word spans across syntax tokens without changing Unicode or tabs', ()
   expect(marked.map(node => node.props.children).join('')).toBe('old');
 });
 
-it.each([false, true])('uses UKai with native syntax enabled: %s', highlighted => {
+it.each([false, true])('uses Noto CJK with native syntax enabled: %s', highlighted => {
   const content = '😀\tconst 中文\u{e0100} = "日本語한국어";';
   const start = content.indexOf('中文');
   const end = content.indexOf('";');
@@ -413,7 +413,7 @@ it.each([false, true])('uses UKai with native syntax enabled: %s', highlighted =
   expect(cjk.every(node => node.parent?.props.style?.backgroundColor === '#ff000050')).toBe(true);
 });
 
-it('keeps UKai on generated lines that skip syntax highlighting', () => {
+it('keeps Noto CJK on generated lines that skip syntax highlighting', () => {
   const content = `${'a'.repeat(5000)}中文😀`;
   act(() => { tree = create(<DiffCodeText content={content} />); });
   expect(renderedText(tree.toJSON())).toBe(content);

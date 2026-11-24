@@ -43,7 +43,7 @@ static NSString *const WhipComposerFontError = @"E_COMPOSER_FONT";
   NSTextStorage *storage = input.textStorage;
   NSRange range = NSMakeRange(0, storage.length);
   if (batchEdits) [storage beginEditing];
-  // Reset inherited UKai attributes before styling CJK, so Latin typed after an
+  // Reset inherited Noto CJK attributes before styling CJK, so Latin typed after an
   // ideograph keeps the composer's original face. Only font attributes change.
   [storage addAttribute:NSFontAttributeName value:baseFont range:range];
   ENRMApplyChatCjkFont(storage, range);

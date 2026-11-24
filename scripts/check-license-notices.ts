@@ -78,9 +78,9 @@ const noticeSources: BundledNoticeSource[] = [
     source: 'assets/terminal-fonts/OFL.txt',
   },
   {
-    id: 'ar-pl-ukai-hk',
-    asset: 'assets/licenses/arphic-public-license.txt',
-    source: 'assets/terminal-fonts/ARPHICPL.txt',
+    id: 'noto-sans-mono-cjk-sc',
+    asset: 'assets/licenses/noto-sans-cjk-OFL-1.1.txt',
+    source: 'assets/terminal-fonts/NotoSansCJK-OFL.txt',
   },
   {
     id: 'symbols-nerd-font-mono',

@@ -13,7 +13,7 @@ export function chatCjkFontSupports(codepoint: number): boolean {
   return false;
 }
 
-/** Group glyphs so ordinary chat text uses the same UKai coverage as Markdown. */
+/** Group glyphs so ordinary chat text uses the same Noto CJK coverage as Markdown. */
 export function chatFontRuns(text: string): { text: string; cjk: boolean }[] {
   const runs: { text: string; cjk: boolean }[] = [];
   for (const char of text) {

@@ -108,6 +108,7 @@ test('removes retired fonts and the replaced Mermaid.js bundle', () => {
   generate();
   for (const directory of outputDirectories) {
     writeFileSync(join(fixture, directory, 'arphic-ukai-hk.woff2'), 'retired font');
+    writeFileSync(join(fixture, directory, 'arphic-ukai-hk.ttf'), 'retired font');
     writeFileSync(join(fixture, directory, 'mermaid.min.js'), 'retired renderer');
     writeFileSync(join(fixture, directory, 'mermaid-LICENSE.txt'), 'retired license');
   }
@@ -117,7 +118,8 @@ test('removes retired fonts and the replaced Mermaid.js bundle', () => {
     expect(existsSync(join(fixture, directory, 'arphic-ukai-hk.woff2'))).toBe(false);
     expect(existsSync(join(fixture, directory, 'mermaid.min.js'))).toBe(false);
     expect(existsSync(join(fixture, directory, 'mermaid-LICENSE.txt'))).toBe(false);
-    expect(existsSync(join(fixture, directory, 'arphic-ukai-hk.ttf'))).toBe(true);
+    expect(existsSync(join(fixture, directory, 'arphic-ukai-hk.ttf'))).toBe(false);
+    expect(existsSync(join(fixture, directory, 'noto-sans-mono-cjk-sc.otf'))).toBe(true);
   }
   expect(() => generate('--check')).not.toThrow();
 });

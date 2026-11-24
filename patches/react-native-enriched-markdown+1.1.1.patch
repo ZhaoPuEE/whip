@@ -1032,7 +1032,7 @@ index 46224e6..1ef46ab 100644
   *  Returns UIFontWeightRegular for unrecognised or nil input. */
  extern UIFontWeight ENRMFontWeightFromString(NSString *_Nullable weightString);
 
-+/** Whip's Expo-loaded UKai face, restricted to its supported CJK characters. */
++/** Whip's Expo-loaded Noto CJK face, restricted to its supported CJK characters. */
 +extern void ENRMApplyChatCjkFont(NSMutableAttributedString *string, NSRange range);
 +
  #ifdef __cplusplus
@@ -1168,7 +1168,7 @@ index 0000000..65d428b
 +import android.text.style.MetricAffectingSpan
 +import com.facebook.react.common.assets.ReactFontManager
 +
-+/** Whip's optional, Expo-loaded UKai face. Apply after other font spans, before layout. */
++/** Whip's optional, Expo-loaded Noto CJK face. Apply after other font spans, before layout. */
 +object ChatCjkFont {
 +  private const val FONT_FAMILY = "WhipChatCJK"
 +  private const val COVERAGE_ASSET = "chat-cjk-codepoints.bin"

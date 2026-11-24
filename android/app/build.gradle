@@ -152,7 +152,9 @@ android {
     // Device regression tests can target an upload-signed local release.
     testBuildType = findProperty('whip.testBuildType') ?: 'debug'
     defaultConfig {
-        applicationId = "io.github.kaminarios.whip"
+        def fontPreview = (findProperty('whip.fontPreview') ?: 'false').toBoolean()
+        applicationId = fontPreview ? "io.github.kaminarios.whip.cjk" : "io.github.kaminarios.whip"
+        manifestPlaceholders.whipAppLabel = fontPreview ? "Whip CJK" : "@string/app_name"
         minSdkVersion = rootProject.ext.minSdkVersion
         targetSdkVersion = rootProject.ext.targetSdkVersion
         versionCode = 247

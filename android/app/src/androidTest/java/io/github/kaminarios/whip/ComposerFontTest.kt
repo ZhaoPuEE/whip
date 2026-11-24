@@ -19,11 +19,11 @@ import org.junit.runner.RunWith
 class ComposerFontTest {
   private val instrumentation = InstrumentationRegistry.getInstrumentation()
   private val context = instrumentation.targetContext
-  private val ukai = Typeface.createFromAsset(context.assets, "arphic-ukai-hk.ttf")
+  private val cjkTypeface = Typeface.createFromAsset(context.assets, "noto-sans-mono-cjk-sc.otf")
 
   @Before fun registerFont() {
     instrumentation.runOnMainSync {
-      ReactFontManager.getInstance().setTypeface("WhipChatCJK", Typeface.NORMAL, ukai)
+      ReactFontManager.getInstance().setTypeface("WhipChatCJK", Typeface.NORMAL, cjkTypeface)
     }
   }
 
@@ -33,7 +33,7 @@ class ComposerFontTest {
     for (span in spans) {
       val paint = TextPaint().apply { typeface = Typeface.MONOSPACE }
       span.updateMeasureState(paint)
-      assertEquals(ukai, paint.typeface)
+      assertEquals(cjkTypeface, paint.typeface)
     }
   }
 

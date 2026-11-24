@@ -1,7 +1,7 @@
 import { chatCjkFontSupports, chatFontRuns } from '../src/lib/chatCjkFont';
 
-test('selects UKai only for supported CJK characters', () => {
-  for (const char of '中文简體日本語，。') expect(chatCjkFontSupports(char.codePointAt(0)!)).toBe(true);
+test('selects Noto CJK only for supported CJK characters', () => {
+  for (const char of '中文简體日本語，。𠮷') expect(chatCjkFontSupports(char.codePointAt(0)!)).toBe(true);
   for (const char of 'ABCabc123😀한국어') expect(chatCjkFontSupports(char.codePointAt(0)!)).toBe(false);
 });
 
