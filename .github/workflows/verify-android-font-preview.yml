@@ -28,7 +28,12 @@ jobs:
           "$sdkmanager" --install emulator platform-tools "$system_image"
           export PATH="$ANDROID_HOME/platform-tools:$PATH"
           printf '%s\n' "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
-          printf 'no\n' | "$avdmanager" create avd --force --name WhipFontQA --package "$system_image" --device pixel_5
+          export ANDROID_USER_HOME="$RUNNER_TEMP/whip-android-user"
+          export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+          mkdir -p "$ANDROID_AVD_HOME"
+          printf 'no\n' | "$avdmanager" create avd --force --name WhipFontQA --package "$system_image" --device pixel_5 --path "$ANDROID_AVD_HOME/WhipFontQA.avd"
+          "$ANDROID_HOME/emulator/emulator" -list-avds
+          test -r "$ANDROID_AVD_HOME/WhipFontQA.ini"
           mkdir -p qa
           trap 'adb devices -l; cat qa/emulator.log' ERR
           timeout 15 adb start-server
