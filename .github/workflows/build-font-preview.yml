@@ -37,6 +37,9 @@ jobs:
       - run: npm test -- --runInBand chatCjkFont cjkText guiFonts appFontSize terminalAssetGeneration searchText remoteGitDiffPreview
         env:
           NODE_ENV: test
+      - uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba
+        with:
+          version: v0.16.0
       - name: Build ARM64 preview APK
         run: >-
           nix develop .#default -c android/gradlew -p android app:assembleRelease
