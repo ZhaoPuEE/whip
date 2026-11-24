@@ -35,6 +35,8 @@ jobs:
       - run: npm ci --include=dev
       - run: node scripts/sync-terminal-assets.ts --check
       - run: npm test -- --runInBand chatCjkFont cjkText guiFonts appFontSize terminalAssetGeneration searchText remoteGitDiffPreview
+        env:
+          NODE_ENV: test
       - name: Build ARM64 preview APK
         run: >-
           nix develop .#default -c android/gradlew -p android app:assembleRelease
