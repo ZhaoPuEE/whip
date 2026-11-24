@@ -26,6 +26,8 @@ jobs:
           avdmanager="$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager"
           system_image='system-images;android-35;google_apis;x86_64'
           "$sdkmanager" --install emulator platform-tools "$system_image"
+          export PATH="$ANDROID_HOME/platform-tools:$PATH"
+          printf '%s\n' "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
           printf 'no\n' | "$avdmanager" create avd --force --name WhipFontQA --package "$system_image" --device pixel_5
           mkdir -p qa
           nohup "$ANDROID_HOME/emulator/emulator" -avd WhipFontQA -no-window -no-snapshot -no-boot-anim -no-audio -gpu swiftshader_indirect -memory 2048 >qa/emulator.log 2>&1 &
@@ -42,7 +44,9 @@ jobs:
         run: |
           set -eu
           pkg=io.github.kaminarios.whip.cjk
-          adb install --no-incremental apk/app-release.apk
+          release_apk="$(find apk -name app-release.apk -type f -print -quit)"
+          test -n "$release_apk"
+          adb install --no-incremental "$release_apk"
           adb shell cmd locale set-app-locales "$pkg" --user 0 --locales zh-CN
           adb shell pm grant "$pkg" android.permission.POST_NOTIFICATIONS
           adb shell am start -W -n "$pkg/io.github.kaminarios.whip.MainActivity"
