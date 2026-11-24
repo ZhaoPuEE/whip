@@ -55,7 +55,23 @@ jobs:
           pkg=io.github.kaminarios.whip.cjk
           release_apk="$(find apk -name app-release.apk -type f -print -quit)"
           test -n "$release_apk"
+          adb root
+          timeout 30 adb wait-for-device
           adb install --no-incremental "$release_apk"
+          # The x86_64 emulator advertises ARM64 via its native bridge, but
+          # SoLoader looks in the x86_64 ZIP directory for unextracted libraries.
+          # Make the original, unmodified libraries visible on this device.
+          installed_apk="$(adb shell pm path "$pkg" | tr -d '\r' | sed -n 's/^package://p' | head -1)"
+          test -n "$installed_apk"
+          adb shell sha256sum "$installed_apk" | awk '{print $1}' > qa/installed-apk.sha256
+          sha256sum "$release_apk" | awk '{print $1}' | diff - qa/installed-apk.sha256
+          libs="$(mktemp -d)"
+          unzip -q "$release_apk" 'lib/arm64-v8a/*.so' -d "$libs"
+          native_dir="$(dirname "$installed_apk")/lib/arm64"
+          adb shell mkdir -p "$native_dir"
+          adb push "$libs/lib/arm64-v8a/." "$native_dir/"
+          adb shell chmod 0755 "$native_dir"
+          adb shell "chmod 0644 '$native_dir'/*.so && restorecon -RF '$native_dir'"
           adb shell cmd locale set-app-locales "$pkg" --user 0 --locales zh-CN
           adb shell pm grant "$pkg" android.permission.POST_NOTIFICATIONS
           adb shell am start -W -n "$pkg/io.github.kaminarios.whip.MainActivity"
@@ -65,8 +81,8 @@ jobs:
             if grep -q '还没有服务器' qa/hosts.xml; then break; fi
             sleep 2
           done
-          grep -q '还没有服务器' qa/hosts.xml
           adb exec-out screencap -p > qa/hosts.png
+          grep -q '还没有服务器' qa/hosts.xml
           python3 - <<'PY'
           import re
           import subprocess
