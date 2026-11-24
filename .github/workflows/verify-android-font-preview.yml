@@ -1,0 +1,86 @@
+name: Verify packaged Android font preview
+
+on:
+  push:
+    branches: [moshi-fonts-android-qa]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          github-token: ${{ github.token }}
+          artifact-ids: '14936663608'
+          run-id: '45420792294'
+          path: apk
+      - name: Start an Android test device
+        run: |
+          sudo chown "$(id -u)" /dev/kvm
+          sdkmanager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          avdmanager="$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager"
+          system_image='system-images;android-35;google_apis;x86_64'
+          "$sdkmanager" --install emulator platform-tools "$system_image"
+          printf 'no\n' | "$avdmanager" create avd --force --name WhipFontQA --package "$system_image" --device pixel_5
+          mkdir -p qa
+          nohup "$ANDROID_HOME/emulator/emulator" -avd WhipFontQA -no-window -no-snapshot -no-boot-anim -no-audio -gpu swiftshader_indirect -memory 2048 >qa/emulator.log 2>&1 &
+          timeout 180 adb wait-for-device
+          for attempt in {1..60}; do
+            if [[ "$(adb shell getprop sys.boot_completed | tr -d '\r')" == 1 ]]; then break; fi
+            sleep 2
+          done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = 1
+          adb shell getprop ro.product.cpu.abilist | tee qa/abis.txt | grep -w arm64-v8a
+          adb shell input keyevent WAKEUP
+          adb shell wm dismiss-keyguard
+      - name: Install and verify the Chinese native interface
+        run: |
+          set -eu
+          pkg=io.github.kaminarios.whip.cjk
+          adb install --no-incremental apk/app-release.apk
+          adb shell cmd locale set-app-locales "$pkg" --user 0 --locales zh-CN
+          adb shell pm grant "$pkg" android.permission.POST_NOTIFICATIONS
+          adb shell am start -W -n "$pkg/io.github.kaminarios.whip.MainActivity"
+          for attempt in {1..10}; do
+            adb shell uiautomator dump /sdcard/whip-qa.xml >/dev/null || true
+            adb exec-out cat /sdcard/whip-qa.xml > qa/hosts.xml
+            if grep -q '还没有服务器' qa/hosts.xml; then break; fi
+            sleep 2
+          done
+          grep -q '还没有服务器' qa/hosts.xml
+          adb exec-out screencap -p > qa/hosts.png
+          python3 - <<'PY'
+          import re
+          import subprocess
+          import xml.etree.ElementTree as ET
+
+          for node in ET.parse('qa/hosts.xml').iter('node'):
+              if node.get('content-desc') == '更多' or node.get('text') == '更多':
+                  left, top, right, bottom = map(int, re.findall(r'\d+', node.get('bounds')))
+                  subprocess.run(['adb', 'shell', 'input', 'tap', str((left+right)//2), str((top+bottom)//2)], check=True)
+                  break
+          else:
+              raise SystemExit('Missing the More tab')
+          PY
+          for attempt in {1..10}; do
+            adb shell uiautomator dump /sdcard/whip-qa.xml >/dev/null || true
+            adb exec-out cat /sdcard/whip-qa.xml > qa/settings.xml
+            if grep -q '用量与费用' qa/settings.xml; then break; fi
+            sleep 2
+          done
+          grep -q '用量与费用' qa/settings.xml
+          adb exec-out screencap -p > qa/settings.png
+      - name: Save device diagnostics
+        if: always()
+        run: adb logcat -d -s AndroidRuntime ReactNativeJS > qa/android.log || true
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: whip-android-font-smoke
+          path: qa/
+          retention-days: 14
